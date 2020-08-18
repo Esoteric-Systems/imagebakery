@@ -205,8 +205,10 @@ chroot $IMAGEDIR systemctl disable dphys-swapfile
 chroot $IMAGEDIR systemctl disable hciuart
 
 # disable 3rd party software
-chroot $IMAGEDIR systemctl disable procon-web-iot
 chroot $IMAGEDIR systemctl disable logiclab
+chroot $IMAGEDIR systemctl disable nodered
+chroot $IMAGEDIR systemctl disable noderedrevpinodes-server
+chroot $IMAGEDIR systemctl disable revpipyload
 
 # boot to console by default, disable autologin
 chroot $IMAGEDIR systemctl set-default multi-user.target
@@ -222,6 +224,9 @@ chroot $IMAGEDIR /usr/bin/revpi-config enable perf-governor
 
 # remove package lists, they will be outdated within days
 rm $IMAGEDIR/var/lib/apt/lists/*Packages
+
+# work around duplicate teamviewer apt source
+rm $IMAGEDIR/etc/apt/sources.list.d/teamviewer-iot-agent.list
 
 # install local packages
 if [ "$(/bin/ls $BAKERYDIR/debs-to-install/*.deb 2>/dev/null)" ] ; then
